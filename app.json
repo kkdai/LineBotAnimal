@@ -1,7 +1,7 @@
 {
   "name": "LineBotBabyLuis",
-  "description": "LineBot with luis feature in Go",
-  "repository": "https://github.com/kkdai/LineBotBabyLuis",
+  "description": "LineBot upload image to TF API server in Go",
+  "repository": "https://github.com/kkdai/LineBotAnimal",
   "keywords": [
     "Line",
     "go",

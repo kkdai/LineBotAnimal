@@ -14,6 +14,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -32,6 +33,12 @@ var allIntents *luis.IntentListResponse
 var currentUtterance string
 
 var apiURL string = "http://107.167.183.27:3000/api/v1/tf-image/"
+
+//TFResponse :
+type TFResponse struct {
+	Message string `json:"message"`
+	Status  int    `json:"status"`
+}
 
 func main() {
 	var err error
@@ -100,8 +107,13 @@ func HandleImage(message *linebot.ImageMessage, replyToken string) error {
 		return err
 	}
 
-	respString := string(repBody)
-	if _, err = bot.ReplyMessage(replyToken, linebot.NewTextMessage(respString)).Do(); err != nil {
+	//unmarshall result
+	var tfRet TFResponse
+	if err := json.Unmarshal(repBody, &tfRet); err != nil {
+		log.Print(err)
+	}
+
+	if _, err = bot.ReplyMessage(replyToken, linebot.NewTextMessage(tfRet.Message)).Do(); err != nil {
 		log.Print(err)
 		return err
 	}
