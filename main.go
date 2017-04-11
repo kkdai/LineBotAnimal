@@ -31,15 +31,10 @@ var luisAction *LuisAction
 var allIntents *luis.IntentListResponse
 var currentUtterance string
 
-var APIURL string = "http://107.167.183.27:3000/api/v1/tf-image/"
+var apiURL string = "http://107.167.183.27:3000/api/v1/tf-image/"
 
 func main() {
 	var err error
-	appID := os.Getenv("APP_ID")
-	apiKey := os.Getenv("APP_KEY")
-	log.Println("Luis:", appID, apiKey)
-	luisAction = NewLuisAction(appID, apiKey)
-
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
 	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
@@ -67,64 +62,12 @@ func callbackHandler(w http.ResponseWriter, r *http.Request) {
 				HandleImage(message, event.ReplyToken)
 
 			case *linebot.TextMessage:
-				ret := luisAction.Predict(message.Text)
-
-				if ret.Name == "None" || ret.Name == "" || ret.Score < 0.5 {
-
-					res, err := luisAction.GetIntents()
-					if err != nil {
-						log.Println(err)
-						return
-					}
-					var intentList []string
-					log.Println("All intent:", *res)
-					for _, v := range *res {
-						if v.Name != "None" {
-							intentList = append(intentList, v.Name)
-						}
-					}
-					//List all intents
-					ListAllIntents(bot, event.ReplyToken, intentList, message.Text)
-
-				} else {
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(fmt.Sprintf("Daddy/Mommy, I just want to %s (%d %%)", ret.Name, int(ret.Score*100)))).Do(); err != nil {
-						log.Print(err)
-					}
+				if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage("Hi, Just upload animal photo to me.")).Do(); err != nil {
+					log.Print(err)
 				}
 			}
-		} else if event.Type == linebot.EventTypePostback {
-			//Add new utterance into original intent
-			luisAction.AddUtterance(event.Postback.Data, currentUtterance)
-
-			retStr := fmt.Sprintf("Daddy/Mommy, I just learn new utterance %s for intent: %s.", currentUtterance, event.Postback.Data)
-			if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(retStr)).Do(); err != nil {
-				log.Print(err)
-			}
-
-			//Train it right away
-			luisAction.Train()
 		}
 	}
-}
-
-//ListAllIntents :
-func ListAllIntents(bot *linebot.Client, replyToken string, intents []string, utterance string) {
-	askStmt := fmt.Sprintf("Your utterance %s is not exist, please select correct intent.", utterance)
-	log.Println("askStmt:", askStmt)
-
-	var sliceTemplateAction []linebot.TemplateAction
-	for _, v := range intents {
-		sliceTemplateAction = append(sliceTemplateAction, linebot.NewPostbackTemplateAction(v, v, ""))
-	}
-
-	template := linebot.NewButtonsTemplate("", "Select your intent for your baby", utterance, sliceTemplateAction...)
-
-	if _, err := bot.ReplyMessage(
-		replyToken,
-		linebot.NewTemplateMessage("Select your intent for your baby", template)).Do(); err != nil {
-		log.Print(err)
-	}
-	currentUtterance = utterance
 }
 
 //HandleImage :
@@ -196,7 +139,7 @@ func PredictContent(filename string) ([]byte, error) {
 
 	log.Printf("Total file length: %d \n", b.Len())
 	// Now that you have a form, you can submit it to your handler.
-	req, err := http.NewRequest("POST", APIURL, &b)
+	req, err := http.NewRequest("POST", apiURL, &b)
 	if err != nil {
 		log.Println(err)
 		return nil, err
@@ -220,11 +163,11 @@ func PredictContent(filename string) ([]byte, error) {
 	}
 
 	defer res.Body.Close()
-	resp_body, err := ioutil.ReadAll(res.Body)
+	respBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Println("Successed: ", string(resp_body))
-	return resp_body, nil
+	log.Println("Successed: ", string(respBody))
+	return respBody, nil
 }
