@@ -22,6 +22,7 @@ How to use it
 
 ### Add friend:
 
+![](images/qrcode.png)
 
 [![加入好友](https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png)](https://line.me/R/ti/p/%40ujo0893j)
 
