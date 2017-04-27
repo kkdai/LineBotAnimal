@@ -37,7 +37,9 @@ How to use it
 How to build your own Tensorflow Chatbot in Golang
 ---------------
 
-TBC
+This chatbot will link to an API server which have tensforflow prebuild model file.
+
+Refer [https://github.com/kkdai/tf-go-inception](https://github.com/kkdai/tf-go-inception) for how to build tensorflow prebuild model API server. 
 
 License
 ---------------
