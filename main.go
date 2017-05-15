@@ -32,7 +32,7 @@ var luisAction *LuisAction
 var allIntents *luis.IntentListResponse
 var currentUtterance string
 
-var apiURL string = "http://107.167.183.27:3000/api/v1/tf-image/"
+var apiURL string = "http://35.185.188.62/:3000/api/v1/tf-image/"
 
 //TFResponse :
 type TFResponse struct {
