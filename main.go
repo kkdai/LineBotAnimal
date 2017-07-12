@@ -23,16 +23,12 @@ import (
 	"net/http"
 	"os"
 
-	luis "github.com/kkdai/luis"
 	"github.com/line/line-bot-sdk-go/linebot"
 )
 
 var bot *linebot.Client
-var luisAction *LuisAction
-var allIntents *luis.IntentListResponse
 var currentUtterance string
-
-var apiURL string = "http://35.185.188.62:3000/api/v1/tf-image/"
+var ApiURL string
 
 //TFResponse :
 type TFResponse struct {
@@ -43,6 +39,7 @@ type TFResponse struct {
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
+	ApiURL = os.Getenv("ApiURL")
 	log.Println("Bot:", bot, " err:", err)
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
@@ -151,7 +148,7 @@ func PredictContent(filename string) ([]byte, error) {
 
 	log.Printf("Total file length: %d \n", b.Len())
 	// Now that you have a form, you can submit it to your handler.
-	req, err := http.NewRequest("POST", apiURL, &b)
+	req, err := http.NewRequest("POST", ApiURL, &b)
 	if err != nil {
 		log.Println(err)
 		return nil, err
