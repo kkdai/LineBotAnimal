@@ -39,7 +39,9 @@ How to build your own Tensorflow Chatbot in Golang
 
 This chatbot will link to an API server which have tensforflow prebuild model file.
 
-Refer [https://github.com/kkdai/tf-go-inception](https://github.com/kkdai/tf-go-inception) for how to build tensorflow prebuild model API server. 
+- Refer [https://github.com/kkdai/tf-go-inception](https://github.com/kkdai/tf-go-inception) for how to build tensorflow prebuild model API server. 
+- Add in Heroko `Config Variables` with
+	- `ApiURL=http://1.2.3.4:3000/api/v1/tf-image/`
 
 License
 ---------------
