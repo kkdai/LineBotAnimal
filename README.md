@@ -16,6 +16,10 @@ ASKME Animal Bot: A Animal Classification Chatbot using Tensorflow inception mod
 - Upload an animal photo, this chatbot will tell you what animal it is.
 - All the training model using [Tensorflow Inception](https://github.com/tensorflow/models/tree/master/inception) result.
 
+## Just Deploy the same on Heroku
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 
 How to use it
 ---------------
